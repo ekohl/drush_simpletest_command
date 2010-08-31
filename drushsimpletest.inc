@@ -185,7 +185,7 @@ abstract class DrushSimpleTestProcessor {
   }
 
   /**
-   * Function to process a single result. Is called by #add_suite.
+   * Function to process a single result.
    *
    * @param $result A single result object as retrieved from the simpletest
    * database.

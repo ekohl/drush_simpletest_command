@@ -10,9 +10,9 @@ require_once('drushsimpletest.inc');
 function simpletest_drush_help($section) {
   switch ($section) {
     case 'drush:test':
-      return dt("Run a specified test and output the results on the command line.");
-    case 'drush:test-mail':
-      return dt("Run tests and email the results. See the docs for run-tests.sh to understand --extra.");
+      return dt("Run a specified test and outputs the results on the command line, and optionally outputs XML and send an email to specified recipients.");
+    case 'drush:test-list':
+      return dt("List all available tests.");
     case 'drush:test clean':
       return dt("Clean leftover tables and file directories from prior test runs.");
   }
@@ -23,20 +23,23 @@ function simpletest_drush_help($section) {
  */
 function simpletest_drush_command() {
   $items['test'] = array(
-      'description' => 'Run a specified test and outputs the results on the command line.',
+      'description' => 'Run a specified test and outputs the results on the command line, and optionally outputs XML and send an email to specified recipients.',
       'examples' => array(
-        "drush test" => "Run all test cases and output results on the command line.",
-        "drush test BlockTestCase" => "Run BlockTestCase and output results on the command line.",
+        "drush test" => "Run all available tests and outputs the results on the command line.",
+        "drush test BlockTestCase" => "Run BlockTestCase and outputs the results on the command line.",
+        "drush test --quiet BlockTestCase" => "Run BlockTestCase quietly, i.e. without outputting results to the command line (test failures will still get output).",
+        "drush test --quiet --mail=admin@test.com BlockTestCase" => "Run BlockTestCase quietly and email the results to admin@test.com",
+        "drush test --xml=/var/output BlockTestCase" => "Run BlockTestCase and output results on the command line and also into an XML file inside the /var/output folder",
         ),
       'arguments' => array(
         'test_class' => 'The test case you want to run.',
         ),
       'options' => array(
-        '--quiet' => 'No output on stdout.',
+        '--quiet' => 'Do not output to the command-line (test failures will still get output).',
         '--color' => 'Use color highlighting for results output.',
         '--error-on-fail' => 'Exit to console with an error code if the test fails.',
-        '--mail' => 'Mail the recipients the output',
-        '--xml' => 'The directory to output XML test results',
+        '--mail=<recipients>' => 'Mail the recipients the output. Separate multiple recipients with a comma.',
+        '--xml=<path>' => 'The directory in which to output XML test results (absolute path required).',
         ),
       'drupal dependencies' => array('simpletest'),
       'core' => array('6','7'),
