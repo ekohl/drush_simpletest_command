@@ -8,6 +8,9 @@ adds some features such as the ability to toggle detailed test output on and
 off and more importantly, it captures and displays any exception logs or other
 critical test failures which the original code failed to do.
 
+The code for XML output is based on an updated run-tests.sh from
+http://www.computerminds.co.uk/hudson-and-simpletest.
+
 It also adds the ability to email a list of recipients the rest results as
 well as output the results in JUnit XML format. Note that this does need
 PHP-DOM. See http://www.php.net/manual/en/dom.installation.php for
