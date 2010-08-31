@@ -226,6 +226,13 @@ abstract class DrushSimpleTestProcessor {
    * Function to be called to process the results. For example, output to stdout.
    */
   public abstract function process_results();
+
+  /**
+   * Function to be called to clean the (hopefully) processed results.
+   */
+  protected function clean_results() {
+    $this->tests = array();
+  }
 }
 
 /**
@@ -290,6 +297,9 @@ class DrushSimpleTestXMLProcessor extends DrushSimpleTestProcessor {
       file_put_contents($file, $content);
 
     } // for each test
+
+    // Clean the output
+    $this->clean_results();
   }
 }
 
@@ -334,6 +344,9 @@ class DrushSimpleTestPrintProcessor extends DrushSimpleTestProcessor {
       }
       $this->print_message("");
     }
+
+    // Clean the output
+    $this->clean_results();
   }
 
   /**
@@ -428,5 +441,8 @@ class DrushSimpleTestMailProcessor extends DrushSimpleTestProcessor {
       // Mail the results
       mail(implode(",", $this->recipients), $subject, $message);
     }
+
+    // Clean the output
+    $this->clean_results();
   }
 }
