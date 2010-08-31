@@ -188,7 +188,7 @@ abstract class DrushSimpleTestProcessor {
    * database.
    */
   public function add_result($result, $time=0) {
-    if(strpos('->', $result->function)) {
+    if(strpos($result->function, '->') !== FALSE) {
       list($class, $name) = explode('->', $result->function, 2);
     } else {
       $class = $result->file;
@@ -252,6 +252,7 @@ class DrushSimpleTestXMLProcessor extends DrushSimpleTestProcessor {
     }
 
     foreach($this->tests as $class => $results) {
+
       // Create the basic document
       $doc = new DomDocument('1.0');
       $doc->formatOutput = true;
@@ -281,12 +282,14 @@ class DrushSimpleTestXMLProcessor extends DrushSimpleTestProcessor {
           }
         }
 
-        // Save the file
-        $file = $this->xml_dir . '/' . $class . '.xml';
-        $content = $doc->saveXML();
-        file_put_contents($file, $content);
-      }
-    }
+      } // for each result
+
+      // Save the file
+      $file = $this->xml_dir . '/' . $class . '.xml';
+      $content = $doc->saveXML();
+      file_put_contents($file, $content);
+
+    } // for each test
   }
 }
 
