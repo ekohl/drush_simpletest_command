@@ -48,7 +48,7 @@ class DrushSimpleTest {
    *
    * @todo Clean up & document exception handlign
    */
-  public function test_all_classes($stop_on_error) {
+  public function test_all_classes() {
     $error = FALSE;
 
     // Run all tests
@@ -57,9 +57,6 @@ class DrushSimpleTest {
         $this->test_class($class);
       } catch(Exception $e) {
         $error = TRUE;
-        if($stop_on_error) {
-          throw $e;
-        }
       }
     }
 

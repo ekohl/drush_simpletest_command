@@ -37,7 +37,7 @@ function simpletest_drush_command() {
       'options' => array(
         '--quiet' => 'Do not output to the command-line (test failures will still get output).',
         '--color' => 'Use color highlighting for results output.',
-        '--error-on-fail' => 'Exit to console with an error code if the test fails.',
+        '--exit-on-fail' => 'Exit to console with an error code if the test fails.',
         '--mail=<recipients>' => 'Mail the recipients the output. Separate multiple recipients with a comma.',
         '--xml=<path>' => 'The directory in which to output XML test results (absolute path required).',
         ),
@@ -83,22 +83,31 @@ function drush_simpletest_test($test_class=NULL) {
 
   $test = new DrushSimpleTest($processors);
 
+  // exit with error code if test fails?
+  $exit_on_fail = !is_null(drush_get_option('exit-on-fail'));
+
   // Actually run the tests
+  $error = FALSE;
   try {
     if($test_class) {
       $test->test_class($test_class);
     } else {
-      $stop_on_error = !is_null(drush_get_option('error-on-fail'));
-      $test->test_all_classes($stop_on_error);
+      $test->test_all_classes();
     }
   } catch(DrushSimpleTestException $e) {
-    drush_log($e->getMessage(), 'warning', $e->getDetail());
+    $error = $e->getMessage();
+    rush_log($e->getMessage(), 'warning', $e->getDetail());
   } catch(Exception $e) {
+    $error = $e->getMessage();
     drush_set_error($e->getMessage(), $e->getTraceAsString());
   }
 
   // Process the results
   $test->process_results();
+
+  // error?
+  if ($exit_on_fail && $error)
+    exit(-1);
 }
 
 // A Drush command callback.
