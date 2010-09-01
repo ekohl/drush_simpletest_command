@@ -96,7 +96,7 @@ function drush_simpletest_test($test_class=NULL) {
     }
   } catch(DrushSimpleTestException $e) {
     $error = $e->getMessage();
-    rush_log($e->getMessage(), 'warning', $e->getDetail());
+    drush_log($e->getMessage(), 'warning', $e->getDetail());
   } catch(Exception $e) {
     $error = $e->getMessage();
     drush_set_error($e->getMessage(), $e->getTraceAsString());
